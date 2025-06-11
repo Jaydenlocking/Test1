@@ -1742,11 +1742,15 @@ do
 		end;
 
 		ToggleRegion.InputBegan:Connect(function(Input)
-			if Input.UserInputType == Enum.UserInputType.MouseButton1 and not Library:MouseIsOverOpenedFrame() then
-				Toggle:SetValue(not Toggle.Value) -- Why was it not like this from the start?
-				Library:AttemptSave();
-			end;
-		end);
+        local isTouch = Input.UserInputType == Enum.UserInputType.Touch
+        local isMouseClick = Input.UserInputType == Enum.UserInputType.MouseButton1
+
+        if (isMouseClick or isTouch) and not Library:MouseIsOverOpenedFrame() then
+        Toggle:SetValue(not Toggle.Value)
+        Library:AttemptSave()
+    end
+end)
+
 
 		if Toggle.Risky then
 			Library:RemoveFromRegistry(ToggleLabel)
@@ -3292,10 +3296,14 @@ function Library:CreateWindow(...)
 		end;
 
 		TabButton.InputBegan:Connect(function(Input)
-			if Input.UserInputType == Enum.UserInputType.MouseButton1 then
-				Tab:ShowTab();
-			end;
-		end);
+     	local isTouch = Input.UserInputType == Enum.UserInputType.Touch
+    	local isMouse = Input.UserInputType == Enum.UserInputType.MouseButton1
+
+    	if (isMouse or isTouch) then
+		Tab:ShowTab();
+	end
+end)
+
 
 		-- This was the first tab added, so we show it by default.
 		if #TabContainer:GetChildren() == 1 then
